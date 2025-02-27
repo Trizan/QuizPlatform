@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Leaderboard - Top Quiz Performers{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/5">
+        <!-- Header Section -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    Global Leaderboard
+                </h1>
+                <p class="text-gray-600 mt-2">Quiz performance rankings</p>
+            </div>
+            
+            <!-- Time Filter Dropdown -->
+            <div class="relative">
+                <select class="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="all_time">All Time</option>
+                    <option value="this_month">This Month</option>
+                    <option value="this_week">This Week</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-white/10">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Rank</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Correct</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Attempts</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Success Rate</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/10">
+                    {% for profile in top_users %}
+                    <tr class="hover:bg-white/5 transition-colors duration-200">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                {% if forloop.counter == 1 %}
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">🥇</span>
+                                    <span class="text-yellow-400 font-medium">#1</span>
+                                </div>
+                                {% elif forloop.counter == 2 %}
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">🥈</span>
+                                    <span class="text-gray-300 font-medium">#2</span>
+                                </div>
+                                {% elif forloop.counter == 3 %}
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">🥉</span>
+                                    <span class="text-orange-400 font-medium">#3</span>
+                                </div>
+                                {% else %}
+                                <span class="text-gray-600 font-medium">#{{ forloop.counter }}</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <img class="h-10 w-10 rounded-full border-2 {% if forloop.counter == 1 %}border-yellow-400{% elif forloop.counter == 2 %}border-gray-400{% elif forloop.counter == 3 %}border-orange-400{% else %}border-white/10{% endif %}" 
+                                     src="{{ profile.avatar.url }}" 
+                                     alt="">
+                                <a href="{% url 'user_profile' profile.user.username %}" 
+                                   class="ml-4 text-sm font-medium hover:text-blue-400 transition duration-200 {% if forloop.counter == 1 %}text-yellow-400{% elif forloop.counter == 2 %}text-gray-300{% elif forloop.counter == 3 %}text-orange-400{% endif %}">
+                                    {{ profile.user.username }}
+                                </a>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if forloop.counter <= 3 %}bg-blue-500/20 text-blue-400{% else %}bg-white/5 text-gray-300{% endif %}">
+                                {{ profile.correct_answers }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if forloop.counter <= 3 %}bg-purple-500/20 text-purple-400{% else %}bg-white/5 text-gray-300{% endif %}">
+                                {{ profile.total_attempts }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-24 bg-gray-700 rounded-full h-2">
+                                    <div class="h-2 rounded-full {% if forloop.counter == 1 %}bg-yellow-400{% elif forloop.counter == 2 %}bg-gray-400{% elif forloop.counter == 3 %}bg-orange-400{% else %}bg-blue-500{% endif %}" 
+                                         style="width: {{ profile.success_rate }}%">
+                                    </div>
+                                </div>
+                                <span class="ml-2 text-sm {% if forloop.counter == 1 %}text-yellow-400{% elif forloop.counter == 2 %}text-gray-300{% elif forloop.counter == 3 %}text-orange-400{% else %}text-gray-300{% endif %}">
+                                    {{ profile.success_rate|floatformat:1 }}%
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center">
+                            <div class="text-gray-600 text-lg">No users have attempted any quizzes yet.</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

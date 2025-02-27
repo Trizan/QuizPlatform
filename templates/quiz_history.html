@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Quiz History{% endblock %}
+
+{% block content %}
+<div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8">
+    <div class="mb-8 flex items-center justify-between">
+        <h1 class="text-2xl font-bold">Quiz History</h1>
+        <a href="{% url 'user_profile' user.username %}" class="text-blue-500 hover:text-blue-600 transition duration-200">
+            Back to Profile
+        </a>
+    </div>
+
+    <div class="space-y-6">
+        {% for attempt in attempts %}
+        <div class="p-4 bg-white/5 rounded-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">{{ attempt.quiz.title }}</h3>
+                <span class="px-3 py-1 rounded-full text-sm {% if attempt.is_correct %}bg-green-500/20 text-green-400{% else %}bg-red-500/20 text-red-400{% endif %}">
+                    {% if attempt.is_correct %}Correct{% else %}Incorrect{% endif %}
+                </span>
+            </div>
+            <div class="space-y-2">
+                <p class="text-gray-300">{{ attempt.quiz.question }}</p>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="text-sm">
+                        <span class="text-gray-400">Your Answer:</span>
+                        <span class="ml-2">Option {{ attempt.selected_answer }}</span>
+                    </div>
+                    <div class="text-sm">
+                        <span class="text-gray-400">Correct Answer:</span>
+                        <span class="ml-2">Option {{ attempt.quiz.correct_answer }}</span>
+                    </div>
+                </div>
+                {% if attempt.quiz.explanation %}
+                <div class="mt-4 p-3 bg-white/5 rounded-lg">
+                    <p class="text-sm text-gray-300">
+                        <span class="font-semibold">Explanation:</span>
+                        {{ attempt.quiz.explanation }}
+                    </p>
+                </div>
+                {% endif %}
+                <div class="mt-4 text-sm text-gray-400">
+                    Attempted on {{ attempt.timestamp|date:"F j, Y, g:i a" }}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-8">
+            <p class="text-gray-400">No quiz attempts yet</p>
+            <a href="{% url 'quiz_feed' user.username %}" class="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition duration-200">
+                Take a Quiz
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

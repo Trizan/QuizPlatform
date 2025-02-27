@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24">
+  <div class="max-w-4xl w-full space-y-8 bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-white/20">
+      <div class="text-center">
+          <div class="mx-auto h-16 w-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300">
+              <span class="text-white text-2xl font-bold">Q</span>
+          </div>
+          <h2 class="text-center text-3xl font-extrabold text-gray-600">
+              Edit Your Profile
+          </h2>
+          <p class="mt-2 text-center text-sm text-gray-300">
+              Customize your learning experience
+          </p>
+          <div class="mt-3 flex justify-center">
+              <span class="inline-flex h-1 w-20 rounded bg-gradient-to-r from-pink-500 to-purple-600"></span>
+          </div>
+      </div>
+
+      {% if messages %}
+      <div class="mb-6">
+          {% for message in messages %}
+          <div class="p-4 rounded-lg {% if message.tags == 'success' %}bg-green-500/20 text-green-400{% else %}bg-red-500/20 text-red-400{% endif %}">
+              {{ message }}
+          </div>
+          {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="grid md:grid-cols-2 gap-8">
+          <!-- Profile Information -->
+          <div class="space-y-6">
+              <h2 class="text-xl font-semibold text-gray-600">Profile Information</h2>
+              <form method="post" enctype="multipart/form-data" class="space-y-4">
+                  {% csrf_token %}
+                  <input type="hidden" name="update_profile" value="true">
+                  
+                  <div class="space-y-2">
+                      <label for="{{ account_form.username.id_for_label }}" class="block text-sm font-medium text-gray-400 mb-1 flex items-center">
+                          Username
+                          <span class="ml-1 text-pink-400">*</span>
+                      </label>
+                      <div class="relative">
+                          {{ account_form.username|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm" }}
+                          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                              </svg>
+                          </div>
+                      </div>
+                      {% if account_form.username.errors %}
+                      <p class="text-pink-400 text-sm mt-1">{{ account_form.username.errors.0 }}</p>
+                      {% endif %}
+                  </div>
+
+                  <div class="space-y-2">
+                      <label for="{{ account_form.email.id_for_label }}" class="block text-sm font-medium text-gray-400 mb-1 flex items-center">
+                          Email
+                          <span class="ml-1 text-pink-400">*</span>
+                      </label>
+                      <div class="relative">
+                          {{ account_form.email|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm" }}
+                          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                              </svg>
+                          </div>
+                      </div>
+                      {% if account_form.email.errors %}
+                      <p class="text-pink-400 text-sm mt-1">{{ account_form.email.errors.0 }}</p>
+                      {% endif %}
+                  </div>
+
+                  <div class="space-y-2">
+                      <label for="{{ profile_form.bio.id_for_label }}" class="block text-sm font-medium text-gray-400 mb-1 flex items-center">
+                          Bio
+                      </label>
+                      <div class="relative">
+                          {{ profile_form.bio|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm" }}
+                      </div>
+                      {% if profile_form.bio.errors %}
+                      <p class="text-pink-400 text-sm mt-1">{{ profile_form.bio.errors.0 }}</p>
+                      {% endif %}
+                  </div>
+
+                  <div class="space-y-2">
+                      <label for="{{ profile_form.avatar.id_for_label }}" class="block text-sm font-medium text-gray-400 mb-1 flex items-center">
+                          Profile Picture
+                      </label>
+                      <div class="flex items-center space-x-4">
+                          <div class="h-16 w-16 rounded-full overflow-hidden bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center">
+                              <img src="{{ user.userprofile.avatar.url }}" alt="Current Profile Picture" class="w-full h-full object-cover">
+                          </div>
+                          <div class="flex-1">
+                              {{ profile_form.avatar|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-pink-500 file:text-gray-600 hover:file:bg-pink-600" }}
+                          </div>
+                      </div>
+                      {% if profile_form.avatar.errors %}
+                      <p class="text-pink-400 text-sm mt-1">{{ profile_form.avatar.errors.0 }}</p>
+                      {% endif %}
+                  </div>
+
+                  <div class="space-y-2">
+                      <label class="block text-sm font-medium text-gray-400 mb-1 flex items-center">
+                          Topics of Interest
+                          <span class="ml-1 text-pink-400">*</span>
+                      </label>
+                      <div class="grid grid-cols-2 gap-3 mb-6" id="topics-container">
+                          {% for topic in profile_form.topics %}
+                          <div class="topic-option p-3 rounded-lg border border-gray-700 bg-white/5 cursor-pointer hover:bg-white/10 transition-all duration-200 {% if topic.is_checked %}selected bg-purple-900/30 border-purple-500{% endif %}">
+                              <div class="flex items-center">
+                                  <span class="h-4 w-4 rounded-full border border-purple-300 mr-2 flex-shrink-0 check-circle {% if topic.is_checked %}bg-purple-500{% endif %}"></span>
+                                  <label for="{{ topic.id_for_label }}" class="text-gray-400 cursor-pointer">
+                                      {{ topic.choice_label }}
+                                      {{ topic.tag }}
+                                  </label>
+                              </div>
+                          </div>
+                          {% endfor %}
+                      </div>
+                      {% if profile_form.topics.errors %}
+                      <p class="text-pink-400 text-sm mt-1">{{ profile_form.topics.errors.0 }}</p>
+                      {% endif %}
+                  </div>
+
+                  <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-lg transform hover:translate-y-[-2px] transition-all duration-300">
+                      <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                          <svg class="h-5 w-5 text-pink-300 group-hover:text-pink-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+                          </svg>
+                      </span>
+                      Update Profile
+                  </button>
+              </form>
+          </div>
+
+          <!-- Privacy Settings -->
+          <div class="space-y-6">
+              <h2 class="text-xl font-semibold text-gray-600">Privacy Settings</h2>
+              <form method="post" class="space-y-4">
+                  {% csrf_token %}
+                  <input type="hidden" name="update_privacy" value="true">
+
+                  <div class="space-y-4">
+                      <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-gray-700 hover:border-purple-500 transition-all duration-200">
+                          <div>
+                              <label for="{{ profile_form.show_address.id_for_label }}" class="font-medium text-gray-600">Show Address</label>
+                              <p class="text-sm text-gray-400">Display your address on your public profile</p>
+                          </div>
+                          {{ profile_form.show_address|add_class:"h-5 w-5 rounded bg-white/5 border-gray-600 text-purple-500 focus:ring-offset-0 focus:ring-purple-500 transition duration-200" }}
+                      </div>
+
+                      <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-gray-700 hover:border-purple-500 transition-all duration-200">
+                          <div>
+                              <label for="{{ profile_form.show_phone_number.id_for_label }}" class="font-medium text-gray-600">Show Phone Number</label>
+                              <p class="text-sm text-gray-400">Display your phone number on your public profile</p>
+                          </div>
+                          {{ profile_form.show_phone_number|add_class:"h-5 w-5 rounded bg-white/5 border-gray-600 text-purple-500 focus:ring-offset-0 focus:ring-purple-500 transition duration-200" }}
+                      </div>
+
+                      <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-gray-700 hover:border-purple-500 transition-all duration-200">
+                          <div>
+                              <label for="{{ profile_form.email_public.id_for_label }}" class="font-medium text-gray-600">Show Email</label>
+                              <p class="text-sm text-gray-400">Display your email on your public profile</p>
+                          </div>
+                          {{ profile_form.email_public|add_class:"h-5 w-5 rounded bg-white/5 border-gray-600 text-purple-500 focus:ring-offset-0 focus:ring-purple-500 transition duration-200" }}
+                      </div>
+                  </div>
+
+                  <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-lg transform hover:translate-y-[-2px] transition-all duration-300">
+                      Update Privacy Settings
+                  </button>
+              </form>
+
+              <!-- Password Change -->
+              <div class="mt-8">
+                  <h2 class="text-xl font-semibold mb-4 text-gray-600">Change Password</h2>
+                  <form method="post" class="space-y-4">
+                      {% csrf_token %}
+                      <input type="hidden" name="change_password" value="true">
+                      
+                      {% for field in password_form %}
+                      <div class="space-y-2">
+                          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-400 mb-1 flex items-center">
+                              {{ field.label }}
+                              <span class="ml-1 text-pink-400">*</span>
+                          </label>
+                          <div class="relative">
+                              {{ field|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm" }}
+                              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                  </svg>
+                              </div>
+                          </div>
+                          {% if field.errors %}
+                          <p class="text-pink-400 text-sm mt-1">{{ field.errors.0 }}</p>
+                          {% endif %}
+                      </div>
+                      {% endfor %}
+
+                      <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-gray-600 bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-lg transform hover:translate-y-[-2px] transition-all duration-300">
+                          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                              <svg class="h-5 w-5 text-green-300 group-hover:text-green-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                              </svg>
+                          </span>
+                          Change Password
+                      </button>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+      <div class="text-center mt-4">
+          <a href="{% url 'user_profile' user.username %}" class="font-medium text-purple-300 hover:text-purple-200 transition-colors duration-200">
+              Back to Profile
+          </a>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Topic selection logic
+    const topicOptions = document.querySelectorAll('.topic-option');
+    
+    topicOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            const checkCircle = this.querySelector('.check-circle');
+            
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                
+                if (checkbox.checked) {
+                    // Select topic
+                    this.classList.add('selected', 'bg-purple-900/30', 'border-purple-500');
+                    checkCircle.classList.add('bg-purple-500');
+                } else {
+                    // Deselect topic
+                    this.classList.remove('selected', 'bg-purple-900/30', 'border-purple-500');
+                    checkCircle.classList.remove('bg-purple-500');
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

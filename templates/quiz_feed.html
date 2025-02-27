@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
+            <h2 class="text-3xl font-bold text-white mb-6 text-center">
+                Your Quiz Journey Awaits
+            </h2>
+            <p id="test_quiz">{{test_quiz}}</p>
+            {% if pending_quizzes %}
+                <div class="grid md:grid-cols-2 gap-6">
+                    {% for quiz in pending_quizzes %}
+                    <div class="bg-white/5 rounded-xl p-6 border border-white/10 transform transition-all duration-300 hover:scale-105 hover:border-purple-500">
+                        <h3 class="text-xl font-bold text-white mb-4">
+                            <a href="{% url 'user_profile' quiz.creator.username %}" class="hover:text-purple-300">
+                                {{ quiz.title }}
+                            </a>
+                        </h3>
+                        <p class="text-gray-300 mb-4">{{ quiz.question }}</p>
+                        
+                        <form method="POST" action="{% url 'submit_quiz_answer' quiz.id %}" class="space-y-3">
+                            {% csrf_token %}
+                            {% for i in "1234" %}
+                            <label class="block">
+                                <input type="radio" name="selected_answer" value="{{ i }}" 
+                                       class="mr-2 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                                <span class="text-gray-200">{{ quiz|get_option:i }}</span>
+                            </label>
+                            {% endfor %}
+                            
+                            <button type="submit" class="mt-4 w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 rounded-lg hover:opacity-90 transition-opacity">
+                                Submit Answer
+                            </button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-gray-300">
+                    <p>No pending quizzes at the moment. Check back later!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="{% url 'completed_quizzes' %}" class="inline-block bg-white/10 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-all">
+                View Completed Quizzes
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

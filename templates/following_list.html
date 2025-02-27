@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile_user.username }}'s Following{% endblock %}
+{% block extra_styles %}{% endblock %}
+<!-- Following List Template -->
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="card">
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold heading-gradient">{{ profile_user.username }} is Following</h1>
+                <p class="text-gray-400 mt-2">People {{ profile_user.username }} follows</p>
+            </div>
+            <a href="{% url 'user_profile' profile_user.username %}" 
+               class="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Profile
+            </a>
+        </div>
+
+        <div class="space-y-4">
+            {% for followed in following %}
+            <div class="user-card group">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <img src="{{ followed.profile_picture.url }}" 
+                             alt="{{ followed.user.username }}'s Profile Picture" 
+                             class="w-12 h-12 rounded-full object-cover group-hover:ring-2 ring-blue-400 transition duration-200">
+                        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                    </div>
+                    <div>
+                        <a href="{% url 'user_profile' followed.user.username %}" 
+                           class="font-semibold hover:text-blue-400 transition duration-200">
+                            {{ followed.user.username }}
+                        </a>
+                        <p class="text-sm text-gray-400">{{ followed.bio|truncatechars:100 }}</p>
+                    </div>
+                </div>
+                {% if user.is_authenticated and user != followed.user %}
+                <form action="{% url 'toggle_follow' followed.user.username %}" 
+                      method="post" 
+                      class="follow-form"
+                      data-username="{{ followed.user.username }}">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            class="px-4 py-2 rounded-lg border {% if followed in user.userprofile.following.all %}border-red-500 text-red-500 hover:bg-red-500/10{% else %}border-blue-500 text-blue-500 hover:bg-blue-500/10{% endif %} transition duration-200">
+                        {% if followed in user.userprofile.following.all %}
+                            Unfollow
+                        {% else %}
+                            Follow
+                        {% endif %}
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="text-center py-12">
+                <svg class="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <p class="text-gray-400 text-lg">Not following anyone yet</p>
+                <p class="text-gray-500 mt-2">When {{ profile_user.username }} follows people, they'll appear here.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

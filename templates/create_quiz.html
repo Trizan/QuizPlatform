@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% block title %}Create Quiz{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <h2 class="text-3xl font-bold text-white mb-6 text-center">
+                Create Your Quiz
+            </h2>
+
+            {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                <div class="p-4 rounded-lg {% if message.tags == 'success' %}bg-green-500/20{% else %}bg-red-500/20{% endif %} text-white">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" class="space-y-6" id="quiz-creation-form">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Quiz Title -->
+                    <div>
+                        <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">
+                            Quiz Title
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                        <p class="text-red-400 text-sm mt-1">{{ form.title.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Topic Selection -->
+                    <div>
+                        <label for="{{ form.topic.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">
+                            Topic
+                        </label>
+                        {{ form.topic }}
+                        {% if form.topic.errors %}
+                        <p class="text-red-400 text-sm mt-1">{{ form.topic.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Quiz Question -->
+                <div>
+                    <label for="{{ form.question.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">
+                        Quiz Question
+                    </label>
+                    {{ form.question }}
+                    {% if form.question.errors %}
+                    <p class="text-red-400 text-sm mt-1">{{ form.question.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Options -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-white mb-4">Answer Options</h3>
+                    <div class="grid grid-cols-12 gap-4 items-center">
+                        <div class="col-span-1">
+                            <input type="radio" name="correct_answer" value="1" class="text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                        </div>
+                        <div class="col-span-11">
+                            {{ form.option1 }}
+                            {% if form.option1.errors %}
+                            <p class="text-red-400 text-sm mt-1">{{ form.option1.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-12 gap-4 items-center">
+                        <div class="col-span-1">
+                            <input type="radio" name="correct_answer" value="2" class="text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                        </div>
+                        <div class="col-span-11">
+                            {{ form.option2 }}
+                            {% if form.option2.errors %}
+                            <p class="text-red-400 text-sm mt-1">{{ form.option2.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-12 gap-4 items-center">
+                        <div class="col-span-1">
+                            <input type="radio" name="correct_answer" value="3" class="text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                        </div>
+                        <div class="col-span-11">
+                            {{ form.option3 }}
+                            {% if form.option3.errors %}
+                            <p class="text-red-400 text-sm mt-1">{{ form.option3.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-12 gap-4 items-center">
+                        <div class="col-span-1">
+                            <input type="radio" name="correct_answer" value="4" class="text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                        </div>
+                        <div class="col-span-11">
+                            {{ form.option4 }}
+                            {% if form.option4.errors %}
+                            <p class="text-red-400 text-sm mt-1">{{ form.option4.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if form.correct_answer.errors %}
+                    <p class="text-red-400 text-sm mt-1">{{ form.correct_answer.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Explanation -->
+                <div>
+                    <label for="{{ form.explanation.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">
+                        Explanation (Optional)
+                    </label>
+                    {{ form.explanation }}
+                    {% if form.explanation.errors %}
+                    <p class="text-red-400 text-sm mt-1">{{ form.explanation.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-8">
+                    <button type="submit" 
+                            class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 rounded-lg hover:opacity-90 transition-opacity text-lg font-bold">
+                        Create Quiz
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('quiz-creation-form');
+    
+    // Add classes to all form inputs
+    const formInputs = form.querySelectorAll('input[type="text"], textarea, select');
+    formInputs.forEach(input => {
+        input.classList.add(
+            'w-full',
+            'px-4',
+            'py-3',
+            'rounded-lg',
+            'bg-white/10',
+            'border',
+            'border-white/20',
+            'text-white',
+            'focus:border-purple-500',
+            'focus:ring-2',
+            'focus:ring-purple-500',
+            'transition-all'
+        );
+    });
+
+    form.addEventListener('submit', function(event) {
+        // Basic client-side validation
+        const title = document.querySelector('[name="title"]').value.trim();
+        const topic = document.querySelector('[name="topic"]').value;
+        const question = document.querySelector('[name="question"]').value.trim();
+        const options = [
+            document.querySelector('[name="option1"]').value.trim(),
+            document.querySelector('[name="option2"]').value.trim(),
+            document.querySelector('[name="option3"]').value.trim(),
+            document.querySelector('[name="option4"]').value.trim()
+        ];
+        const correctAnswer = document.querySelector('input[name="correct_answer"]:checked');
+        
+        let isValid = true;
+        let errorMessage = '';
+        
+        if (!title) {
+            errorMessage = 'Please enter a quiz title';
+            isValid = false;
+        } else if (!topic) {
+            errorMessage = 'Please select a topic';
+            isValid = false;
+        } else if (!question) {
+            errorMessage = 'Please enter a quiz question';
+            isValid = false;
+        } else if (options.some(opt => !opt)) {
+            errorMessage = 'Please fill in all option fields';
+            isValid = false;
+        } else if (!correctAnswer) {
+            errorMessage = 'Please select the correct answer';
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            event.preventDefault();
+            alert(errorMessage);
+        }
+    });
+});
+</script>
+{% endblock %}

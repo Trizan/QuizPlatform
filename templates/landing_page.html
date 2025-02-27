@@ -1,0 +1,369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizPlatform - Transform Your Learning Journey</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Gradient animations */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        .category-card {
+            transition: all 0.3s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hover effects */
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+
+        #scroll-top {
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Hero section background */
+        .hero-bg {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI1MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIiBpZD0iZzEiPjxzdG9wIHN0b3AtY29sb3I9IiMzNzNmYWYiIG9mZnNldD0iMCUiLz48c3RvcCBzdG9wLWNvbG9yPSIjOGE0YWE4IiBvZmZzZXQ9IjEwMCUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZzEpIi8+PC9zdmc+');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-orange-900 via-yellow-900 to-white-800 animate-gradient">
+        <!-- Navigation -->
+        <nav class="fixed w-full z-50 bg-indigo-900/80 backdrop-blur-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <!-- Logo -->
+                    <div class="flex items-center">
+                        <a href="/quizzes/" class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-2xl font-bold">Q</span>
+                            </div>
+                            <span class="text-white text-xl font-bold">QuizPlatform</span>
+                        </a>
+                    </div>
+
+                    <!-- Navigation Links -->
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+                        <a href="#categories" class="text-gray-300 hover:text-white transition-colors">Categories</a>
+                        <a href="#testimonials" class="text-gray-300 hover:text-white transition-colors">Testimonials</a>
+                        <a href="{% url 'login' %}" class="text-gray-300 hover:text-white transition-colors">Login</a>
+                        <a href="{% url 'signup' %}" class="px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-white font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300">
+                            Sign Up
+                        </a>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden">
+                        <button class="text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden pt-20">
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 hero-bg opacity-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-purple-900/90"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="pt-20 pb-16 text-center lg:pt-32 fade-in">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 mb-6">
+                    Revolutionize Your Learning Journey
+                </h1>
+                <p class="mt-6 text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+                    Experience the future of interactive learning with QuizPlatform's AI-powered quizzes, 
+                    real-time competitions, and personalized learning paths.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4 fade-in">
+                    <a href="{% url 'signup' %}" class="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl text-white font-bold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center">
+                        Start Your Journey
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </a>
+                    <button class="px-8 py-4 bg-white bg-opacity-10 rounded-xl text-white font-bold text-lg hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                        Watch Demo
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {% for stat in stats %}
+                    <div class="p-6 bg-white bg-opacity-10 rounded-2xl backdrop-blur-lg hover:bg-opacity-15 transition-all duration-300 fade-in">
+                        <div class="flex items-center justify-center gap-2">
+                            <img src="{% static stat.icon %}" alt="{{ stat.label }}" class="w-6 h-6">
+                            <h3 class="text-4xl font-bold text-white">{{ stat.value }}</h3>
+                        </div>
+                        <p class="text-gray-300 mt-2">{{ stat.label }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-20 bg-gradient-to-b from-purple-900 to-indigo-900" id="features">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-white mb-6">
+                    Transform Your Learning Experience
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Discover a new way of learning with our innovative features designed to make your educational journey engaging and effective.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for feature in features %}
+                <div class="p-6 bg-white bg-opacity-5 rounded-2xl backdrop-blur-lg hover:bg-opacity-10 transition-all duration-300 transform hover:-translate-y-2 fade-in">
+                    <div class="w-16 h-16 mb-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center">
+                        <img src="{% static feature.icon %}" alt="{{ feature.title }}" class="w-8 h-8 text-white">
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">{{ feature.title }}</h3>
+                    <p class="text-gray-300">{{ feature.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- categories.html -->
+    <div class="py-20 bg-gradient-to-b from-indigo-900 to-purple-900" id="categories">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-white mb-6">
+                    Explore Our Quiz Categories
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Dive into a world of knowledge with our diverse range of quiz categories.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {% for category in categories %}
+                <div class="category-card rounded-xl overflow-hidden shadow-lg bg-white bg-opacity-5 hover:bg-opacity-10 transition-all duration-300 fade-in">
+                    <div class="relative h-48">
+                        {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <img src="{% static 'images/default_category.jpg' %}" alt="{{ category.name }}" class="w-full h-full object-cover">
+                        {% endif %}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">{{ category.name }}</h3>
+                            <p class="text-gray-200 text-sm">{{ category.description }}</p>
+                            <div class="mt-4 flex items-center justify-between">
+                                <span class="text-gray-300 text-sm">{{ category.quiz_count }} Quizzes</span>
+                                <span class="text-gray-300 text-sm">{{ category.total_questions }} Questions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center text-gray-300">
+                    No categories available at the moment.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="py-20 bg-gradient-to-b from-purple-900 to-pink-900" id="testimonials">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-white mb-6">
+                    Success Stories
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Join thousands of satisfied learners who have transformed their education journey with QuizPlatform.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for testimonial in testimonials %}
+                <div class="p-6 bg-white bg-opacity-5 rounded-2xl backdrop-blur-lg hover:bg-opacity-10 transition-all duration-300 fade-in">
+                    <div class="flex items-center mb-4">
+                        <img src="{% static testimonial.image %}" alt="{{ testimonial.name }}" class="w-12 h-12 rounded-full">
+                        <div class="ml-4">
+                            <h4 class="text-white font-bold">{{ testimonial.name }}</h4>
+                            <p class="text-gray-400">{{ testimonial.role }}</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">{{ testimonial.quote }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Final CTA Section -->
+    <div class="py-20 bg-gradient-to-b from-pink-900 to-indigo-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center fade-in">
+                <h2 class="text-4xl font-bold text-white mb-6">
+                    Ready to Transform Your Learning?
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+                    Join our community of learners and start your journey towards knowledge mastery today.
+                </p>
+                <a href="{% url 'signup' %}" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl text-white font-bold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-1">
+                    Get Started Now
+                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-indigo-900 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">QuizPlatform</h3>
+                    <p class="text-gray-400">Empowering learners worldwide through interactive education.</p>
+                </div>
+                {% for section in footer_sections %}
+                <div>
+                    <h4 class="text-white font-bold mb-4">{{ section.title }}</h4>
+                    <ul class="space-y-2">
+                        {% for link in section.links %}
+                        <li>
+                            <a href="{{ link.url }}" class="text-gray-400 hover:text-white transition-colors">
+                                {{ link.text }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-800">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400">&copy; {% now "Y" %} QuizPlatform. All rights reserved.</p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        {% for social in social_links %}
+                        <a href="{{ social.url }}" class="text-gray-400 hover:text-white transition-colors">
+                            <span class="sr-only">{{ social.name }}</span>
+                            <img src="{% static social.icon %}" alt="{{ social.name }}" class="h-6 w-6">
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button id="scroll-top" onclick="scrollToTop()" 
+            class="fixed bottom-8 right-8 p-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-1">
+        <svg class="w-6 h-6 text-white transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </button>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const scrollTopButton = document.getElementById('scroll-top');
+
+            function checkScroll() {
+                fadeElements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    const isVisible = (rect.top <= window.innerHeight * 0.8);
+                    if (isVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+
+                // Show/hide scroll to top button
+                if (window.pageYOffset > 300) {
+                    scrollTopButton.style.display = 'block';
+                } else {
+                    scrollTopButton.style.display = 'none';
+                }
+            }
+
+            window.addEventListener('scroll', checkScroll);
+            checkScroll();
+        });
+
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>

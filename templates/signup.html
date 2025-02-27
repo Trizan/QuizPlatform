@@ -1,0 +1,254 @@
+{% extends "login.html" %}
+{% load custom_filters %}
+
+{% block auth_content %}
+<!-- Enhanced Signup Template -->
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24">
+  <div class="max-w-md w-full space-y-8 bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-white/20">
+      <div class="text-center">
+          <div class="mx-auto h-16 w-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300">
+              <span class="text-white text-2xl font-bold">Q</span>
+          </div>
+          <h2 class="text-center text-3xl font-extrabold text-white">
+              Create Your Account
+          </h2>
+          <p class="mt-2 text-center text-sm text-gray-300">
+              Start your learning journey today
+          </p>
+          <div class="mt-3 flex justify-center">
+              <span class="inline-flex h-1 w-20 rounded bg-gradient-to-r from-pink-500 to-purple-600"></span>
+          </div>
+      </div>
+      
+      <!-- Main signup form -->
+      <form id="signupForm" class="mt-8 space-y-6" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="grid gap-5">
+              {% for field in form %}
+              {% if field.name != 'topics' and field.name != 'profile_picture' and field.name != 'avatar' %}
+            <div class="space-y-2">
+              <div class="space-y-2">
+                  <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-200 mb-1 flex items-center">
+                      {{ field.label }}
+                      {% if field.field.required %}
+                          <span class="ml-1 text-pink-400">*</span>
+                      {% endif %}
+                  </label>
+                  <div class="relative" >
+                      {{ field|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm" }}
+                      
+                      {% if field.name == 'username' %}
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                          </svg>
+                      </div>
+                      {% endif %}
+                      
+                      {% if field.name == 'email' %}
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                          </svg>
+                      </div>
+                      {% endif %}
+                      
+                      {% if 'password' in field.name %}
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                          </svg>
+                      </div>
+                      {% endif %}
+
+                      {% if 'avatar' in field.name %}
+                      <div class="space-y-2">
+                        <label for="{{ form.avatar.id_for_label }}" class="block text-sm font-medium text-gray-200 mb-1 flex items-center">
+                            Profile Picture
+                        </label>
+                        <div class="relative">
+                            {{ form.avatar|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm" }}
+                        </div>
+                        <p class="text-xs text-gray-400">Optional: Upload a profile picture or a random one will be assigned</p>
+                       </div>
+                       {% endif %}
+                  </div>
+              </div>
+              {% endif %}
+              {% endfor %}
+              
+              <!-- Avatar upload field -->
+              <div class="space-y-2">
+                <label for="{{ form.avatar.id_for_label }}" class="block text-sm font-medium text-gray-200 mb-1 flex items-center">
+                    Avatar
+                </label>
+                <div class="relative">
+                    {{ form.avatar|add_class:"appearance-none block w-full px-4 py-3 border border-gray-700 bg-white/5 backdrop-blur-md placeholder-gray-400 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm" }}
+                </div>
+                <p class="text-xs text-gray-400">Optional: Upload a profile picture or a random one will be assigned</p>
+              </div>
+              
+          </div>
+
+          <div class="pt-2">
+              <button type="button" id="continueBtn" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-lg transform hover:translate-y-[-2px] transition-all duration-300">
+                  <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                      <svg class="h-5 w-5 text-pink-300 group-hover:text-pink-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+                      </svg>
+                  </span>
+                  Continue
+              </button>
+          </div>
+          
+          <!-- Django form fields for topics (hidden but will be submitted) -->
+          <div id="topics-form-field" style="display: none;">
+              {{ form.topics }}
+          </div>
+      </form>
+
+      <!-- Topic selection modal (hidden by default) -->
+      <div id="topicModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+          <div class="bg-indigo-900 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-purple-500/30">
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-white">Choose Topics You're Interested In</h3>
+                <p class="text-gray-300 text-sm mt-1">Select topics to personalize your experience</p>
+            </div>
+              
+            <div class="grid grid-cols-2 gap-3 mb-6" id="topic-options-container">
+                {% for topic in form.topics.field.queryset %}
+                <div class="topic-option p-3 rounded-lg border border-gray-700 bg-white/5 cursor-pointer hover:bg-white/10 transition-all duration-200" data-topic-id="{{ topic.id }}">
+                    <div class="flex items-center">
+                        <span class="h-4 w-4 rounded-full border border-purple-300 mr-2 flex-shrink-0 check-circle"></span>
+                        <span class="text-gray-200">{{ topic.name }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+              
+              <div class="text-center">
+                  <p class="text-sm text-gray-400 mb-4"><span id="topicCount">0</span> topics selected</p>
+                  <button id="submitWithTopics" disabled class="w-full py-3 px-4 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium opacity-50 cursor-not-allowed transition-all duration-300">
+                      Create Account
+                  </button>
+              </div>
+          </div>
+      </div>
+      
+      <div class="text-center mt-4">
+          <p class="text-sm text-gray-300">
+              Already have an account?
+              <a href="{% url 'login' %}" class="font-medium text-purple-300 hover:text-purple-200 transition-colors duration-200">
+                  Sign in
+              </a>
+          </p>
+          <p class="text-xs text-gray-400 mt-4">
+              By signing up, you agree to our 
+              <a href="#" class="text-purple-300 hover:text-purple-200 transition-colors duration-200">Terms of Service</a> 
+              and 
+              <a href="#" class="text-purple-300 hover:text-purple-200 transition-colors duration-200">Privacy Policy</a>
+          </p>
+      </div>
+  </div>
+</div>
+
+<!-- JavaScript for topic selection functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const continueBtn = document.getElementById('continueBtn');
+        const topicModal = document.getElementById('topicModal');
+        const topicOptions = document.querySelectorAll('.topic-option');
+        const topicCount = document.getElementById('topicCount');
+        const submitWithTopicsBtn = document.getElementById('submitWithTopics');
+        const signupForm = document.getElementById('signupForm');
+        
+        // Get the actual Django form field checkboxes (they're hidden)
+        const topicCheckboxes = document.querySelectorAll('#topics-form-field input[type="checkbox"]');
+        
+        let selectedTopics = [];
+
+        // Show topic modal when continue button is clicked
+        continueBtn.addEventListener('click', function() {
+            // Basic form validation here
+            const requiredFields = ['username', 'email', 'password'];
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                const input = document.querySelector(`[name="${field}"]`);
+                if (!input || !input.value.trim()) {
+                    isValid = false;
+                    // Add some visual indication that the field is required
+                    if (input) {
+                        input.classList.add('border-red-500');
+                        
+                        // Remove the error highlight when user types
+                        input.addEventListener('input', function() {
+                            this.classList.remove('border-red-500');
+                        }, {once: true});
+                    }
+                }
+            });
+            
+            if (isValid) {
+                topicModal.classList.remove('hidden');
+            }
+        });
+
+        // Topic selection logic
+        topicOptions.forEach((option, index) => {
+            option.addEventListener('click', function() {
+                const topicId = this.dataset.topicId;
+                const checkCircle = this.querySelector('.check-circle');
+                
+                // Find the corresponding checkbox in the Django form
+                const checkbox = Array.from(topicCheckboxes).find(
+                    cb => cb.value === topicId
+                );
+                
+                if (this.classList.contains('selected')) {
+                    // Deselect topic
+                    this.classList.remove('selected', 'bg-purple-900/30', 'border-purple-500');
+                    checkCircle.classList.remove('bg-purple-500');
+                    
+                    // Update the actual checkbox
+                    if (checkbox) checkbox.checked = false;
+                    
+                    // Remove from selected topics
+                    selectedTopics = selectedTopics.filter(id => id !== topicId);
+                } else {
+                    // Select topic
+                    this.classList.add('selected', 'bg-purple-900/30', 'border-purple-500');
+                    checkCircle.classList.add('bg-purple-500');
+                    
+                    // Update the actual checkbox
+                    if (checkbox) checkbox.checked = true;
+                    
+                    // Add to selected topics
+                    selectedTopics.push(topicId);
+                }
+
+                // Update count and button state
+                topicCount.textContent = selectedTopics.length;
+
+                if (selectedTopics.length > 0) {
+                    submitWithTopicsBtn.disabled = false;
+                    submitWithTopicsBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    submitWithTopicsBtn.classList.add('hover:from-pink-600', 'hover:to-purple-700');
+                } else {
+                    submitWithTopicsBtn.disabled = true;
+                    submitWithTopicsBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    submitWithTopicsBtn.classList.remove('hover:from-pink-600', 'hover:to-purple-700');
+                }
+            });
+        });
+
+        // Submit form with selected topics
+        submitWithTopicsBtn.addEventListener('click', function() {
+            if (selectedTopics.length > 0) {
+                signupForm.submit();
+            }
+        });
+    });
+</script>
+{% endblock %}

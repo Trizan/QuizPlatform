@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <h2 class="text-3xl font-bold text-white mb-6 text-center">
+                Your Quiz Achievements
+            </h2>
+            
+            {% if completed_quizzes %}
+                <div class="grid md:grid-cols-2 gap-6">
+                    {% for quiz in completed_quizzes %}
+                    <div class="bg-white/5 rounded-xl p-6 border border-white/10 transform transition-all duration-300 hover:scale-105 {% if attempted_dict|get_item:quiz.id.is_correct %}border-green-500{% else %}border-red-500{% endif %}">
+                        <h3 class="text-xl font-bold text-white mb-4">
+                            {{ quiz.title }}
+                        </h3>
+                        
+                        {% with attempt=attempted_dict|get_item:quiz.id %}
+                        <div class="space-y-3">
+                            <p class="text-gray-300">{{ quiz.question }}</p>
+                            
+                            <div class="{% if attempt.is_correct %}text-green-400{% else %}text-red-400{% endif %} font-bold">
+                                {% if attempt.is_correct %}
+                                    ✅ Correct Answer!
+                                {% else %}
+                                    ❌ Incorrect. Correct answer was Option {{ quiz.correct_answer }}
+                                {% endif %}
+                            </div>
+                            
+                            <button onclick="this.nextElementSibling.classList.toggle('hidden')" 
+                                    class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-2 rounded-lg hover:opacity-90 transition-opacity">
+                                Show Explanation
+                            </button>
+                            
+                            <div class="quiz-explanation hidden mt-4 p-4 bg-white/10 rounded-lg">
+                                <h4 class="font-bold text-white mb-2">Explanation:</h4>
+                                <p class="text-gray-300">{{ quiz.explanation|default:"No explanation provided." }}</p>
+                            </div>
+                        </div>
+                        {% endwith %}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-gray-300">
+                    <p>No completed quizzes yet. Start solving quizzes to see your progress!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
