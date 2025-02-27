@@ -1,0 +1,8 @@
+Django==4.2.19
+requests
+pillow
+python-dotenv
+django-crispy-forms
+crispy-bootstrap4
+djangorestframework
+psycopg2-binary
