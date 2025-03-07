@@ -70,7 +70,7 @@ class UserRegistrationForm(forms.ModelForm):
                 user.userprofile.avatar = self.cleaned_data.get("avatar")
             else:
                 # Try to set a random default avatar
-                default_folder = os.path.join(settings.MEDIA_ROOT, 'default_avatars')
+                default_folder = os.path.join(settings.MEDIA_ROOT, 'profile_pics')
                 print(f"Default folder path: {default_folder}")
                 print(f"Does folder exist: {os.path.exists(default_folder)}")
                 if os.path.exists(default_folder):
@@ -81,20 +81,20 @@ class UserRegistrationForm(forms.ModelForm):
                         choices = os.listdir(default_folder)
                         if choices:
                             random_choice = random.choice(choices)
-                            user.userprofile.avatar = f'default_avatars/{random_choice}'
+                            user.userprofile.avatar = f'profile_pics/{random_choice}'
                         else:
                             # Fallback to a specific default if directory is empty
-                            user.userprofile.avatar = 'default_avatars/avatar_1.jpg'
+                            user.userprofile.avatar = 'profile_pics/avatar_1.jpg'
                     else:
                         # Fallback if directory doesn't exist
-                        user.userprofile.avatar = 'default_avatars/avatar_1.jpg'
+                        user.userprofile.avatar = 'profile_pics/avatar_1.jpg'
 
                     # Log that we're using the default avatar
                     print(f"Using default avatar: {user.userprofile.avatar}")
                 except Exception as e:
                     # Log any errors that occur
                     print(f"Error setting default avatar: {e}")
-                    user.userprofile.avatar = 'default_avatars/avatar_1.jpg'
+                    user.userprofile.avatar = 'profile_pics/avatar_1.jpg'
 
             user.userprofile.save()
         return user

@@ -14,7 +14,7 @@ class Topic(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
-    avatar = models.ImageField(upload_to='profile_pics/', default='default_avatars/avatar_1.jpg')
+    avatar = models.ImageField(upload_to='profile_pics/', default='profile_pics/avatar_1.jpg')
     topics = models.ManyToManyField(Topic, blank=True)
     followers = models.ManyToManyField('self', symmetrical=False, related_name='following', blank=True)
     created_at = models.DateTimeField(default=timezone.now)
